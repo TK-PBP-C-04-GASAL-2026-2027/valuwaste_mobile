@@ -1,0 +1,23 @@
+# Pemilik kode per folder. Setiap Pull Request yang mengubah folder di bawah
+# otomatis meminta review dari pemiliknya. Aturan yang lebih bawah menang.
+
+# Default: file di luar folder modul (pubspec, README, konfigurasi) direview anggota mana pun.
+*                               @fazaaqila09 @JeudiAugusto @niaishere-code @pearlitaanindya @ricocalohhh
+
+# Kode bersama (theme, API client, login, router, widget umum)
+/lib/core/                      @fazaaqila09 @JeudiAugusto @niaishere-code @pearlitaanindya @ricocalohhh
+/lib/main.dart                  @fazaaqila09 @JeudiAugusto @niaishere-code @pearlitaanindya @ricocalohhh
+
+# Modul 1 - Autentikasi, Authorisasi & User Profile
+/lib/features/auth/             @JeudiAugusto
+# Modul 2 - Waste Inventory & Listing Management
+/lib/features/listings/         @pearlitaanindya
+# Modul 3 - Waste Discovery & Category-First Search
+/lib/features/discovery/        @niaishere-code
+# Modul 4 - Waste Request & Supply Aggregation Engine
+/lib/features/aggregation/      @fazaaqila09
+# Modul 5 - Transaction Processing, Tracking & Role Dashboards
+/lib/features/transactions/     @ricocalohhh
+
+# Konfigurasi repo dan CI
+/.github/                       @fazaaqila09 @JeudiAugusto @niaishere-code @pearlitaanindya @ricocalohhh
