@@ -1,8 +1,5 @@
 # ValuWaste
 
-- **Desain UI/UX (Figma):** https://www.figma.com/design/MNTMRkR9XEjzxLZCYFUa9c/ValuWaste?node-id=0-1
-- **Pembagian tugas:** https://docs.google.com/spreadsheets/d/1zVzZvlQqqcT6G_41qoJB4cSMLoq2-CZUB-Yp2XWCDpo/edit?usp=sharing
-
 ## Daftar Isi
 
 1. [Anggota Kelompok](#anggota-kelompok)
@@ -10,6 +7,13 @@
 3. [Value Proposition Questions](#value-proposition-questions)
 4. [Perbandingan dengan Kompetitor](#perbandingan-dengan-kompetitor)
 5. [Jenis & Peran Pengguna Aplikasi](#jenis--peran-pengguna-aplikasi)
+6. [Modul yang Diimplementasikan](#modul-yang-diimplementasikan)
+7. [Daftar Endpoint API](#daftar-endpoint-api)
+8. [Sumber Data](#sumber-data)
+9. [Cara Menjalankan](#cara-menjalankan)
+10. [Struktur Folder](#struktur-folder)
+11. [Tautan](#tautan)
+12. [Deklarasi Penggunaan AI](#deklarasi-penggunaan-ai)
 
 ## Anggota Kelompok
 
@@ -81,3 +85,121 @@ Perbedaan utama ValuWaste ada pada mekanisme penggabungan pasokan dari penjual y
 ### 3. Admin
 - **Target user:** tim pengelola aplikasi
 - **Peran user:** Memastikan integritas data transaksi, verifikasi validitas akun bisnis/penjual, mengelola data kategori limbah, serta menangani penyelesaian kendala.
+
+## Modul yang Diimplementasikan
+
+| Modul | Penanggung jawab | Branch | Folder Flutter | API Django |
+|---|---|---|---|---|
+| 1. Autentikasi, RBAC & User Profile | Jeudi Augusto Asadullah | `modul1-jeudi` | `lib/features/auth/` | menyusul |
+| 2. Waste Inventory & Listing | Pearlita Anindya Prameswari | `modul2-pearl` | `lib/features/listings/` | menyusul |
+| 3. Discovery & Category-First Search | Rania Aqila | `modul3-nia` | `lib/features/discovery/` | menyusul |
+| 4. Waste Request & Supply Aggregation | Muhammad Faza Aqila | `modul4-faza` | `lib/features/aggregation/` | `/api/v1/aggregation/` |
+| 5. Transaction, Tracking & Dashboards | Enrico Oscar Harits Caloh | `modul5-rico` | `lib/features/transactions/` | menyusul |
+
+Kode bersama (tema, navigasi, koneksi API) ada di `lib/core/`.
+
+## Daftar Endpoint API
+
+Semua endpoint adalah Django REST Framework di server web ValuWaste.
+
+- **Base URL:** `http://enrico-oscar-valuwaste.pws.cs.ui.ac.id` (pakai `http`, bukan `https`)
+- **Login:** session Django lewat `CookieRequest` dari `pbp_django_auth`. Satu `CookieRequest` dibuat di `lib/app.dart` dan dipakai semua modul.
+- **Header wajib:** `X-ValuWaste-Client: mobile` (sudah dipasang otomatis di `lib/core/network/api_client.dart`). Header ini membuat POST/PATCH/DELETE dari aplikasi tidak ditolak cek CSRF.
+- **Format error:** `{"detail": "..."}` atau `{"<field>": ["..."]}` (format bawaan DRF).
+
+### Modul 4 · Waste Request & Supply Aggregation (`/api/v1/aggregation/`)
+
+Hanya untuk Company Buyer yang aktif. Angka kg dan rupiah dikirim sebagai string, misalnya `"30.00"`.
+
+| Method | Endpoint | Fungsi |
+|---|---|---|
+| GET | `categories/` | Daftar kategori untuk form kebutuhan |
+| GET | `preview/?category=<id>&quantity=<kg>[&max_price=<rp>][&strategy=CHEAPEST]` | Hitung pasokan yang tersedia tanpa menyimpan |
+| GET | `requests/[?q=<teks>&status=OPEN]` | Daftar kebutuhan milik buyer |
+| POST | `requests/` | Buat kebutuhan dan susun bundle pertama |
+| GET | `requests/<id>/` | Detail kebutuhan, bundle, saran seller, dan masalah item |
+| PATCH | `requests/<id>/` | Ubah judul, target, harga maksimal, atau catatan |
+| DELETE | `requests/<id>/` | Batalkan kebutuhan (status jadi `CANCELLED`) |
+| POST | `requests/<id>/bundle/` | Susun ulang bundle (`CHEAPEST` atau `FEWEST_SELLERS`) |
+| POST | `requests/<id>/bundle/items/` | Tambah seller ke bundle |
+| DELETE | `requests/<id>/bundle/items/` | Kosongkan bundle |
+| PATCH | `requests/<id>/bundle/items/<item_id>/` | Ubah jumlah kg satu seller |
+| DELETE | `requests/<id>/bundle/items/<item_id>/` | Hapus satu seller dari bundle |
+| POST | `requests/<id>/bundle/confirm/` | Tandai bundle siap checkout (checkout di Modul 5) |
+
+### Modul 1, 2, 3, dan 5
+
+Diisi oleh pemilik modul masing-masing (method, endpoint, fungsi), dengan format tabel yang sama seperti Modul 4.
+
+## Sumber Data
+
+Aplikasi mobile tidak menyimpan data sendiri. Semua data diambil dari API Django di atas:
+
+- **Data awal:** 50 listing limbah, 8 kategori, 8 seller, dan 1 buyer dari seed Modul 3 (`python manage.py seed_market`). Di PWS, data ini dimasukkan otomatis oleh migrasi.
+- **Data wilayah:** Konoha Land API, diambil server Django saat user mengisi alamat.
+- **Ongkos kirim:** RajaOngkir API, dihitung server Django saat checkout.
+
+## Cara Menjalankan
+
+Butuh Flutter 3.47.9 (versi yang sama dengan CI).
+
+```bash
+git clone https://github.com/TK-PBP-C-04-GASAL-2026-2027/valuwaste_mobile.git
+cd valuwaste_mobile
+flutter pub get
+flutter run
+```
+
+Jalankan di emulator Android atau HP Android. Versi web (Chrome) tidak bisa memanggil API PWS karena server tidak mengizinkan CORS.
+
+Secara default aplikasi memakai server PWS. Untuk server Django lokal:
+
+```bash
+flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000
+```
+
+`10.0.2.2` adalah alamat laptop dari dalam emulator Android. Untuk HP asli, pakai IP laptop di jaringan Wi-Fi yang sama.
+
+Sebelum push:
+
+```bash
+flutter analyze
+flutter test
+```
+
+## Struktur Folder
+
+```
+lib/
+  main.dart
+  app.dart                 Provider CookieRequest, tema, dan navigasi
+  core/
+    config/                alamat server (ApiConfig)
+    network/               CookieRequest + header mobile, helper getJson
+    theme/                 warna dan tema aplikasi, font DM Sans
+    navigation/            top bar dan menu navigasi antarmodul (AppShell)
+    widgets/               tampilan loading, kosong, error, dan halaman sementara
+  features/
+    auth/                  Modul 1
+    listings/              Modul 2
+    discovery/             Modul 3
+    aggregation/           Modul 4
+    transactions/          Modul 5
+assets/fonts/              DM Sans (SIL Open Font License, lihat OFL.txt)
+```
+
+## Tautan
+
+- **Aplikasi web dan API (PWS):** http://enrico-oscar-valuwaste.pws.cs.ui.ac.id/
+- **Desain UI/UX web (Figma):** https://www.figma.com/design/MNTMRkR9XEjzxLZCYFUa9c/ValuWaste?node-id=0-1
+- **APK:** menyusul
+
+## Deklarasi Penggunaan AI
+
+| Anggota | Alat AI | Dipakai untuk | Yang diperiksa atau diputuskan sendiri |
+|---|---|---|---|
+| Muhammad Faza Aqila | | | |
+| Enrico Oscar Harits Caloh | | | |
+| Pearlita Anindya Prameswari | | | |
+| Jeudi Augusto Asadullah | | | |
+| Rania Aqila | | | |
