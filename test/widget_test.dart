@@ -37,17 +37,18 @@ void main() {
       expect(find.widgetWithText(InkWell, label), findsOneWidget);
     }
 
-    // Transactions dipakai di sini karena halaman Orders (Waste requests)
-    // memanggil API.
-    await tester.tap(find.widgetWithText(InkWell, 'Transactions'));
+    // Profile dipakai di sini karena halaman ini belum memanggil API.
+    // Halaman yang memanggil API menampilkan loading terus di test, sehingga
+    // pumpAndSettle tidak pernah selesai.
+    await tester.tap(find.widgetWithText(InkWell, 'Profile'));
     await tester.pumpAndSettle();
-    expect(pageTitle('Transactions'), findsOneWidget);
+    expect(pageTitle('Profile'), findsOneWidget);
 
     await tester.tap(find.byTooltip('Menu'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Close ×'));
     await tester.pumpAndSettle();
     expect(find.text('Close ×'), findsNothing);
-    expect(pageTitle('Transactions'), findsOneWidget);
+    expect(pageTitle('Profile'), findsOneWidget);
   });
 }
