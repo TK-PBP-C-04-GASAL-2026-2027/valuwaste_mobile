@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Akses internet untuk API Django; PWS memakai http, jadi cleartext diizinkan. -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="valuwaste_mobile"
+        android:label="ValuWaste"
+        android:usesCleartextTraffic="true"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

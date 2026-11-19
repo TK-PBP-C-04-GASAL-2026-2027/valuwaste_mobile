@@ -1,30 +1,53 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:valuwaste_mobile/main.dart';
+import 'package:valuwaste_mobile/app.dart';
+import 'package:valuwaste_mobile/core/widgets/page_header.dart';
+
+Finder pageTitle(String text) =>
+    find.descendant(of: find.byType(PageHeader), matching: find.text(text));
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('App opens on Community market with the ValuWaste top bar', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const ValuWasteApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(pageTitle('Community market'), findsOneWidget);
+    expect(
+      find.descendant(of: find.byType(AppBar), matching: find.text('ValuWaste')),
+      findsOneWidget,
+    );
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('Menu panel lists every module and switches pages', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const ValuWasteApp());
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    await tester.tap(find.byTooltip('Menu'));
+    await tester.pumpAndSettle();
+    for (final label in [
+      'Community market',
+      'My listings',
+      'Orders',
+      'Transactions',
+      'Profile',
+    ]) {
+      expect(find.widgetWithText(InkWell, label), findsOneWidget);
+    }
+
+    // Transactions dipakai di sini karena halaman Orders (Waste requests)
+    // memanggil API.
+    await tester.tap(find.widgetWithText(InkWell, 'Transactions'));
+    await tester.pumpAndSettle();
+    expect(pageTitle('Transactions'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Menu'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Close ×'));
+    await tester.pumpAndSettle();
+    expect(find.text('Close ×'), findsNothing);
+    expect(pageTitle('Transactions'), findsOneWidget);
   });
 }
