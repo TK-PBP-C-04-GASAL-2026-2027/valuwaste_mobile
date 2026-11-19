@@ -94,7 +94,7 @@ Perbedaan utama ValuWaste ada pada mekanisme penggabungan pasokan dari penjual y
 | 2. Waste Inventory & Listing | Pearlita Anindya Prameswari | `modul2-pearl` | `lib/features/listings/` | menyusul |
 | 3. Discovery & Category-First Search | Rania Aqila | `modul3-nia` | `lib/features/discovery/` | menyusul |
 | 4. Waste Request & Supply Aggregation | Muhammad Faza Aqila | `modul4-faza` | `lib/features/aggregation/` | `/api/v1/aggregation/` |
-| 5. Transaction, Tracking & Dashboards | Enrico Oscar Harits Caloh | `modul5-rico` | `lib/features/transactions/` | menyusul |
+| 5. Transaction, Tracking & Dashboards | Enrico Oscar Harits Caloh | `modul5-rico` | `lib/features/transactions/` | `/api/v1/transactions/` |
 
 Kode bersama (tema, navigasi, koneksi API) ada di `lib/core/`.
 
@@ -127,7 +127,16 @@ Hanya untuk Company Buyer yang aktif. Angka kg dan rupiah dikirim sebagai string
 | DELETE | `requests/<id>/bundle/items/<item_id>/` | Hapus satu seller dari bundle |
 | POST | `requests/<id>/bundle/confirm/` | Tandai bundle siap checkout (checkout di Modul 5) |
 
-### Modul 1, 2, 3, dan 5
+### Modul 5 · Transaction, Tracking & Dashboards (`/api/v1/transactions/`)
+
+Butuh login (buyer, seller, atau admin). Buyer melihat pesanannya, seller melihat pesanan yang berisi listing-nya, admin melihat semua.
+
+| Method | Endpoint | Fungsi |
+|---|---|---|
+| GET | `orders/[?q=<teks>&status=<STATUS>]` | Daftar pesanan |
+| GET | `orders/<code>/` | Detail pesanan dan riwayat pelacakan |
+
+### Modul 1, 2, 3
 
 Diisi oleh pemilik modul masing-masing (method, endpoint, fungsi), dengan format tabel yang sama seperti Modul 4.
 
