@@ -90,11 +90,11 @@ Perbedaan utama ValuWaste ada pada mekanisme penggabungan pasokan dari penjual y
 
 | Modul | Penanggung jawab | Branch | Folder Flutter | API Django |
 |---|---|---|---|---|
-| 1. Autentikasi, RBAC & User Profile | Jeudi Augusto Asadullah | `modul1-jeudi` | `lib/features/auth/` | menyusul |
-| 2. Waste Inventory & Listing | Pearlita Anindya Prameswari | `modul2-pearl` | `lib/features/listings/` | menyusul |
-| 3. Discovery & Category-First Search | Rania Aqila | `modul3-nia` | `lib/features/discovery/` | menyusul |
-| 4. Waste Request & Supply Aggregation | Muhammad Faza Aqila | `modul4-faza` | `lib/features/aggregation/` | `/api/v1/aggregation/` |
-| 5. Transaction, Tracking & Dashboards | Enrico Oscar Harits Caloh | `modul5-rico` | `lib/features/transactions/` | `/api/v1/transactions/` |
+| 1. Autentikasi, RBAC & User Profile | Jeudi Augusto Asadullah | `modul_1_jeudi` | `lib/features/auth/` | menyusul |
+| 2. Waste Inventory & Listing | Pearlita Anindya Prameswari | `modul_2_pearl` | `lib/features/listings/` | menyusul |
+| 3. Discovery & Category-First Search | Rania Aqila | `modul_3_nia` | `lib/features/discovery/` | menyusul |
+| 4. Waste Request & Supply Aggregation | Muhammad Faza Aqila | `modul_4_faza` | `lib/features/aggregation/` | `/api/v1/aggregation/` |
+| 5. Transaction, Tracking & Dashboards | Enrico Oscar Harits Caloh | `modul_5_rico` | `lib/features/transactions/` | `/api/v1/transactions/` |
 
 Kode bersama (tema, navigasi, koneksi API) ada di `lib/core/`.
 
