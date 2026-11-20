@@ -53,16 +53,29 @@ class _ShellPage {
 }
 
 class _AppShellState extends State<AppShell> {
-  static const List<_ShellPage> _pages = [
+  late final List<_ShellPage> _pages = [
     _ShellPage(label: 'Community market', page: MarketPage()),
     _ShellPage(label: 'My listings', page: ListingsPage()),
     _ShellPage(label: 'Orders', page: RequestsPage()),
     _ShellPage(label: 'Transactions', page: OrdersPage()),
-    _ShellPage(label: 'Profile', page: ProfilePage()),
+    _ShellPage(
+      label: 'Profile',
+      page: ProfilePage(onSessionChanged: _resetAccountPages),
+    ),
   ];
 
   int _index = 0;
   final Set<int> _opened = {0};
+
+  DemoAccount? _role;
+
+  void _resetAccountPages(DemoAccount? role) {
+    setState(() {
+      _role = role;
+      _opened.removeWhere((index) => index != 4);
+      _opened.add(_index);
+    });
+  }
 
   void _select(int index) {
     setState(() {
@@ -76,11 +89,13 @@ class _AppShellState extends State<AppShell> {
       context,
       items: [
         for (var i = 0; i < _pages.length; i++)
-          AppMenuItem(
-            label: _pages[i].label,
-            selected: i == _index,
-            onTap: () => _select(i),
-          ),
+          if (!(i == 1 && _role == DemoAccount.buyer) &&
+              !(i == 2 && _role == DemoAccount.seller))
+            AppMenuItem(
+              label: _pages[i].label,
+              selected: i == _index,
+              onTap: () => _select(i),
+            ),
       ],
       // Modul 1: isi aksi Sign out setelah login tersedia.
       onSignOut: null,
