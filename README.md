@@ -107,6 +107,33 @@ Semua endpoint adalah Django REST Framework di server web ValuWaste.
 - **Header wajib:** `X-ValuWaste-Client: mobile` (sudah dipasang otomatis di `lib/core/network/api_client.dart`). Header ini membuat POST/PATCH/DELETE dari aplikasi tidak ditolak cek CSRF.
 - **Format error:** `{"detail": "..."}` atau `{"<field>": ["..."]}` (format bawaan DRF).
 
+### Modul 2 · Waste Inventory & Listing Management (`/api/inventory/`)
+
+Seller aktif dapat mengelola listing sampah miliknya sendiri. Admin dapat mengelola kategori sampah. Endpoint menggunakan Django REST Framework (DRF).
+
+| Method | Endpoint | Fungsi |
+|---|---|---|
+| GET | `listings/[?search=<teks>&category=<id>&status=<status>]` | Daftar listing milik seller, dengan pencarian dan filter |
+| POST | `listings/` | Tambah listing sampah baru |
+| GET | `listings/<id>/` | Detail listing milik seller |
+| PUT | `listings/<id>/` | Ubah seluruh data listing |
+| PATCH | `listings/<id>/` | Ubah sebagian data listing |
+| DELETE | `listings/<id>/` | Hapus listing |
+| GET | `categories/` | Daftar kategori sampah |
+| POST | `categories/` | Tambah kategori baru (admin) |
+| GET | `categories/<id>/` | Detail kategori sampah |
+| PUT | `categories/<id>/` | Ubah seluruh data kategori (admin) |
+| PATCH | `categories/<id>/` | Ubah sebagian data kategori (admin) |
+| DELETE | `categories/<id>/` | Hapus kategori (admin) |
+
+**Ketentuan:**
+- Seller hanya dapat melihat dan mengelola listing miliknya sendiri.
+- Listing memiliki informasi kategori, judul, deskripsi, gambar, jumlah (kg), harga per kg, lokasi pengambilan, dan status.
+- Status listing yang dapat diatur langsung oleh seller: `draft`, `available`, dan `deactivated`.
+- Jumlah stok tidak boleh negatif dan harga per kg harus lebih dari 0.
+- Kategori yang masih digunakan oleh listing tidak dapat dihapus.
+- Endpoint kategori hanya dapat diubah oleh admin, sedangkan GET kategori dapat diakses oleh pengguna aktif yang sudah login.
+
 ### Modul 4 · Waste Request & Supply Aggregation (`/api/v1/aggregation/`)
 
 Hanya untuk Company Buyer yang aktif. Angka kg dan rupiah dikirim sebagai string, misalnya `"30.00"`.
