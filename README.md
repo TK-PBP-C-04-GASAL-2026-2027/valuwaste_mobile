@@ -134,6 +134,20 @@ Seller aktif dapat mengelola listing sampah miliknya sendiri. Admin dapat mengel
 - Kategori yang masih digunakan oleh listing tidak dapat dihapus.
 - Endpoint kategori hanya dapat diubah oleh admin, sedangkan GET kategori dapat diakses oleh pengguna aktif yang sudah login.
 
+### Modul 3 · Waste Discovery & Category-First Search (`/market/api/`)
+
+Semua pengguna (termasuk publik/belum login) dapat menjelajahi pasar material berdasarkan kategori maupun mencari listing sampah aktif dengan filter dan pengurutan[cite: 14, 17].
+
+| Method | Endpoint | Fungsi |
+|---|---|---|
+| GET | `markets/` | Daftar pasar per kategori material beserta ringkasan total stok, jumlah seller aktif, dan harga terendah per kg[cite: 1, 14] |
+| GET | `search/[?q=<teks>&category=<id>&location=<lokasi>&sort=<urutan>]` | Pencarian dan filter daftar listing sampah aktif beserta info kategori dan seller[cite: 14, 17] |
+
+**Ketentuan:**
+- Endpoint dapat diakses secara publik (`GET`) tanpa wajib login untuk melihat katalog kategori dan hasil pencarian listing[cite: 17].
+- Respons `search/` mengembalikan objek berformat `{"count": <int>, "results": [...]}` dengan detail setiap listing (`id`, `title`, `category`, `quantity_kg`, `price_per_kg`, `location`, `description`, `image_url`, dan `seller`)[cite: 17].
+- Daftar kategori dan listing dapat difilter berdasarkan kata kunci pencarian maupun lokasi, serta diurutkan berdasarkan harga[cite: 1].
+
 ### Modul 4 · Waste Request & Supply Aggregation (`/api/v1/aggregation/`)
 
 Hanya untuk Company Buyer yang aktif. Angka kg dan rupiah dikirim sebagai string, misalnya `"30.00"`.
