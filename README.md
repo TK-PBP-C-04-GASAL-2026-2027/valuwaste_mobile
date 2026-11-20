@@ -90,13 +90,17 @@ Perbedaan utama ValuWaste ada pada mekanisme penggabungan pasokan dari penjual y
 
 | Modul | Penanggung jawab | Branch | Folder Flutter | API Django |
 |---|---|---|---|---|
-| 1. Autentikasi, RBAC & User Profile | Jeudi Augusto Asadullah | `modul_1_jeudi` | `lib/features/auth/` | menyusul |
+| 1. Autentikasi, RBAC & User Profile | Jeudi Augusto Asadullah | `modul_1_jeudi` | `lib/features/auth/` | Data demo lokal |
 | 2. Waste Inventory & Listing | Pearlita Anindya Prameswari | `modul_2_pearl` | `lib/features/listings/` | menyusul |
 | 3. Discovery & Category-First Search | Rania Aqila | `modul_3_nia` | `lib/features/discovery/` | menyusul |
 | 4. Waste Request & Supply Aggregation | Muhammad Faza Aqila | `modul_4_faza` | `lib/features/aggregation/` | `/api/v1/aggregation/` |
 | 5. Transaction, Tracking & Dashboards | Enrico Oscar Harits Caloh | `modul_5_rico` | `lib/features/transactions/` | `/api/v1/transactions/` |
 
 Kode bersama (tema, navigasi, koneksi API) ada di `lib/core/`.
+
+### Modul 1 pada Checkpoint 1
+
+Jeudi Augusto Asadullah (2506656822) mengerjakan alur masuk, tampilan profil, menu sesuai peran, dan keluar di Flutter. Untuk mencoba, buka **Profile**, masukkan username `seller`, `buyer`, atau `admin` dengan password `demo123`. Sesi demo tersimpan di memori sampai pengguna keluar atau aplikasi dimulai ulang. Integrasi autentikasi dengan layanan tim akan ditentukan setelah diskusi.
 
 ## Daftar Endpoint API
 
@@ -251,5 +255,5 @@ assets/fonts/              DM Sans (SIL Open Font License, lihat OFL.txt)
 | Muhammad Faza Aqila | | | |
 | Enrico Oscar Harits Caloh | | | |
 | Pearlita Anindya Prameswari | | | |
-| Jeudi Augusto Asadullah | | | |
+| Jeudi Augusto Asadullah | OpenAI Codex | Prototipe sesi lokal, halaman Profile, dan pengujian Flutter | Menunggu tinjauan Jeudi |
 | Rania Aqila | | | |
